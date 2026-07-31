@@ -3,7 +3,9 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { fetchPostById, upvotePost } from '../services/postsService';
 import { fetchCommentsByPostId, createComment } from '../services/commentsService';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { FaRocket, FaEdit, FaTrash, FaClock, FaUser, FaComment } from 'react-icons/fa';
+import { FaRocket, FaEdit, FaTrash, FaClock, FaUser, FaComment } from 'react-icons/fa'; 
+import { flagPost, createRepost } from '../services/postsService';
+import { FaFlag, FaRetweet } from 'react-icons/fa';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -16,6 +18,7 @@ const PostDetail = () => {
   const [loading, setLoading] = useState(true);
   const [submittingComment, setSubmittingComment] = useState(false);
   const [error, setError] = useState(null);
+  const [flagged, setFlagged] = useState(false);
 
   const loadData = async () => {
     try {
@@ -69,6 +72,27 @@ const PostDetail = () => {
     }
   };
 
+  const handleFlag = async () => {
+    if (flagged) return;
+    try {
+      await flagPost(post.id, post.flags || 0);
+      setFlagged(true);
+      alert('Signal flagged for review.');
+    } catch (err) {
+      console.error('Error flagging post:', err);
+    }
+  };
+
+  const handleRepost = async () => {
+    const author = prompt('Enter your alias for this repost:');
+    try {
+      const repost = await createRepost(post, author);
+      navigate(`/post/${repost.id}`);
+    } catch (err) {
+      setError('Failed to mirror transmission.');
+    }
+  };
+
   if (loading) return <LoadingSpinner />;
   if (error || !post) return <div className="error-message">{error || 'Transmission not found.'}</div>;
 
@@ -114,6 +138,19 @@ const PostDetail = () => {
         <div className="upvote-bar">
           <button onClick={handleUpvote} className="upvote-btn-large">
             <FaRocket /> {post.upvotes} Upvotes
+          </button>
+        </div>
+
+        <div className="post-interaction-bar">
+          <button onClick={handleRepost} className="btn-secondary">
+            <FaRetweet /> Repost Transmission
+          </button>
+          <button 
+            onClick={handleFlag} 
+            className={`btn-secondary ${flagged ? 'flagged' : ''}`}
+            disabled={flagged}
+          >
+            <FaFlag /> {flagged ? 'Flagged' : 'Flag Signal'}
           </button>
         </div>
       </article>
