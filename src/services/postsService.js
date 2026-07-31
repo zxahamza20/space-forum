@@ -70,3 +70,34 @@ export const deletePost = async (id) => {
   if (error) throw error;
   return data;
 };
+
+export const flagPost = async (id, currentFlags) => {
+  const { data, error } = await supabase
+    .from('posts')
+    .update({ flags: currentFlags + 1 })
+    .eq('id', id)
+    .select();
+
+  if (error) throw error;
+  return data[0];
+};
+
+export const createRepost = async (parentPost, newAuthor) => {
+  const { data, error } = await supabase
+    .from('posts')
+    .insert([
+      {
+        title: `Repost: ${parentPost.title}`,
+        content: parentPost.content,
+        author: newAuthor || 'Anonymous Stargazer',
+        secret_key: `repost_${Date.now()}`,
+        media_url: parentPost.media_url,
+        media_type: parentPost.media_type,
+        parent_id: parentPost.id,
+      },
+    ])
+    .select();
+
+  if (error) throw error;
+  return data[0];
+};
