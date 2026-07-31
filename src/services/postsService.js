@@ -1,10 +1,14 @@
 import { supabase } from '../supabaseClient';
 
-export const fetchPosts = async ({ searchQuery = '', sortBy = 'created_at' } = {}) => {
+export const fetchPosts = async ({ searchQuery = '', category = '', sortBy = 'created_at' } = {}) => {
   let query = supabase.from('posts').select('*');
 
   if (searchQuery) {
     query = query.ilike('title', `%${searchQuery}%`);
+  }
+
+  if (category) {
+    query = query.eq('category', category);
   }
 
   if (sortBy === 'upvotes') {

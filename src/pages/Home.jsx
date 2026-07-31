@@ -2,19 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { fetchPosts, upvotePost } from '../services/postsService';
 import PostCard from '../components/PostCard';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { FaSearch, FaSort } from 'react-icons/fa';
+import { FaSearch, FaSort, FaFilter } from 'react-icons/fa';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('created_at'); 
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [sortBy, setSortBy] = useState('created_at');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const loadPosts = async () => {
     try {
       setLoading(true);
-      const data = await fetchPosts({ searchQuery, sortBy });
+      const data = await fetchPosts({
+        searchQuery,
+        category: selectedCategory,
+        sortBy,
+      });
       setPosts(data);
       setError(null);
     } catch (err) {
@@ -27,10 +32,10 @@ const Home = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       loadPosts();
-    }, 300); 
+    }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery, sortBy]);
+  }, [searchQuery, selectedCategory, sortBy]);
 
   const handleUpvote = async (id, currentUpvotes) => {
     try {
@@ -53,6 +58,23 @@ const Home = () => {
         <p>Explore recent interstellar discussions and media.</p>
       </header>
 
+      {/* Category Flag Pills */}
+      <div className="category-filter-bar">
+        <span className="filter-label"><FaFilter /> Filter Flag:</span>
+        <div className="category-pills">
+          {['', 'Question', 'Opinion', 'Discussion', 'Media'].map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`pill-btn ${selectedCategory === cat ? 'active' : ''}`}
+            >
+              {cat === '' ? 'All Signals' : cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Search & Sort Controls */}
       <div className="filter-bar">
         <div className="search-box">
           <FaSearch className="search-icon" />
@@ -79,6 +101,7 @@ const Home = () => {
         </div>
       </div>
 
+      {/* Main Content Render */}
       {loading ? (
         <LoadingSpinner />
       ) : error ? (

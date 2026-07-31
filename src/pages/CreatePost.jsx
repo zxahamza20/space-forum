@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPost } from '../services/postsService';
 import { fetchAstronomyPictureOfDay, searchNasaLibrary } from '../services/nasaService';
-import { FaRocket, FaSearch, FaImage } from 'react-icons/fa';
-import { uploadMediaFile } from '../services/storageService'; 
+import { uploadMediaFile } from '../services/storageService';
+import { FaRocket, FaSearch, FaFileUpload } from 'react-icons/fa';
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -15,33 +15,15 @@ const CreatePost = () => {
     secret_key: '',
     media_url: '',
     media_type: 'image',
+    category: 'Question',
   });
 
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [uploadingFile, setUploadingFile] = useState(false); 
-
-  const handleFileUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      setUploadingFile(true);
-      const publicUrl = await uploadMediaFile(file);
-      setFormData((prev) => ({
-        ...prev,
-        media_url: publicUrl,
-        media_type: 'image',
-      }));
-    } catch (err) {
-      setError('Failed to upload file to storage.');
-    } finally {
-      setUploadingFile(false);
-    }
-  };
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -60,6 +42,7 @@ const CreatePost = () => {
         content: prev.content || apod.description,
         media_url: apod.url,
         media_type: apod.mediaType === 'video' ? 'video' : 'image',
+        category: 'Media',
       }));
     } catch (err) {
       setError('Failed to fetch NASA APOD data.');
@@ -89,9 +72,29 @@ const CreatePost = () => {
       content: prev.content || item.description,
       media_url: item.url,
       media_type: 'image',
+      category: 'Media',
     }));
     setSearchResults([]);
     setSearchQuery('');
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setUploadingFile(true);
+      const publicUrl = await uploadMediaFile(file);
+      setFormData((prev) => ({
+        ...prev,
+        media_url: publicUrl,
+        media_type: 'image',
+      }));
+    } catch (err) {
+      setError('Failed to upload file to storage.');
+    } finally {
+      setUploadingFile(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -110,6 +113,7 @@ const CreatePost = () => {
         secret_key: formData.secret_key,
         media_url: formData.media_url,
         media_type: formData.media_type,
+        category: formData.category,
       });
       navigate(`/post/${newPost.id}`);
     } catch (err) {
@@ -124,6 +128,7 @@ const CreatePost = () => {
       <h1>Transmit New Space Discussion</h1>
       {error && <p className="error-message">{error}</p>}
 
+      {/* NASA Media Integration Helper */}
       <div className="nasa-helper-section">
         <h3>Import NASA Media</h3>
         <div className="nasa-buttons">
@@ -135,7 +140,7 @@ const CreatePost = () => {
         <form onSubmit={handleNasaSearch} className="nasa-search-form">
           <input
             type="text"
-            placeholder="Search NASA library (e.g. Hubble, Mars, Orion)"
+            placeholder="Search NASA library (e.g., Hubble, Mars, Orion)"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -156,9 +161,25 @@ const CreatePost = () => {
         )}
       </div>
 
-      <hr />
+      <hr className="divider" />
 
+      {/* Main Post Form */}
       <form onSubmit={handleSubmit} className="post-form">
+        <div className="form-group">
+          <label>Post Flag / Characteristic *</label>
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            required
+          >
+            <option value="Question">❓ Question</option>
+            <option value="Opinion">💡 Opinion</option>
+            <option value="Discussion">💬 Discussion</option>
+            <option value="Media">🌌 Media / Discovery</option>
+          </select>
+        </div>
+
         <div className="form-group">
           <label>Title *</label>
           <input
@@ -195,23 +216,48 @@ const CreatePost = () => {
         </div>
 
         <div className="form-group">
-          <label>Media URL (Image or Direct Video Stream)</label>
+          <label>Media Attachment Type</label>
+          <div className="radio-group">
+            <label>
+              <input
+                type="radio"
+                name="media_type"
+                value="image"
+                checked={formData.media_type === 'image'}
+                onChange={handleChange}
+              /> Image URL
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="media_type"
+                value="video"
+                checked={formData.media_type === 'video'}
+                onChange={handleChange}
+              /> Web Video (YouTube / Vimeo)
+            </label>
+          </div>
+
           <input
             type="url"
             name="media_url"
             value={formData.media_url}
             onChange={handleChange}
-            placeholder="https://..."
+            placeholder={
+              formData.media_type === 'video'
+                ? 'https://www.youtube.com/watch?v=...'
+                : 'https://...'
+            }
           />
         </div>
 
         <div className="form-group">
-          <label>Or Upload Attachment File</label>
-          <input 
-            type="file" 
-            accept="image/*" 
-            onChange={handleFileUpload} 
-            disabled={uploadingFile} 
+          <label><FaFileUpload /> Or Upload Image File</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileUpload}
+            disabled={uploadingFile}
           />
           {uploadingFile && <small>Uploading file to deep space storage...</small>}
         </div>
@@ -228,7 +274,7 @@ const CreatePost = () => {
           ></textarea>
         </div>
 
-        <button type="submit" className="btn-primary" disabled={loading}>
+        <button type="submit" className="btn-primary" disabled={loading || uploadingFile}>
           {loading ? 'Transmitting...' : 'Send Transmission'}
         </button>
       </form>

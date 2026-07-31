@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { fetchPostById, upvotePost } from '../services/postsService';
+import { fetchPostById, upvotePost, flagPost, createRepost } from '../services/postsService';
 import { fetchCommentsByPostId, createComment } from '../services/commentsService';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { FaRocket, FaEdit, FaTrash, FaClock, FaUser, FaComment } from 'react-icons/fa'; 
-import { flagPost, createRepost } from '../services/postsService';
-import { FaFlag, FaRetweet } from 'react-icons/fa';
+import { getEmbedVideoUrl } from '../utils/videoHelper';
+import { FaRocket, FaEdit, FaClock, FaUser, FaComment, FaFlag, FaRetweet, FaArrowLeft } from 'react-icons/fa';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -17,8 +16,8 @@ const PostDetail = () => {
   const [authorAlias, setAuthorAlias] = useState('');
   const [loading, setLoading] = useState(true);
   const [submittingComment, setSubmittingComment] = useState(false);
-  const [error, setError] = useState(null);
   const [flagged, setFlagged] = useState(false);
+  const [error, setError] = useState(null);
 
   const loadData = async () => {
     try {
@@ -51,6 +50,28 @@ const PostDetail = () => {
     }
   };
 
+  const handleFlag = async () => {
+    if (flagged || !post) return;
+    try {
+      await flagPost(post.id, post.flags || 0);
+      setFlagged(true);
+      alert('Transmission flagged for review.');
+    } catch (err) {
+      console.error('Error flagging post:', err);
+    }
+  };
+
+  const handleRepost = async () => {
+    if (!post) return;
+    const author = prompt('Enter your alias for this repost:');
+    try {
+      const repost = await createRepost(post, author);
+      navigate(`/post/${repost.id}`);
+    } catch (err) {
+      setError('Failed to mirror transmission.');
+    }
+  };
+
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!newComment.trim()) return;
@@ -72,36 +93,18 @@ const PostDetail = () => {
     }
   };
 
-  const handleFlag = async () => {
-    if (flagged) return;
-    try {
-      await flagPost(post.id, post.flags || 0);
-      setFlagged(true);
-      alert('Signal flagged for review.');
-    } catch (err) {
-      console.error('Error flagging post:', err);
-    }
-  };
-
-  const handleRepost = async () => {
-    const author = prompt('Enter your alias for this repost:');
-    try {
-      const repost = await createRepost(post, author);
-      navigate(`/post/${repost.id}`);
-    } catch (err) {
-      setError('Failed to mirror transmission.');
-    }
-  };
-
   if (loading) return <LoadingSpinner />;
   if (error || !post) return <div className="error-message">{error || 'Transmission not found.'}</div>;
 
   const formattedDate = new Date(post.created_at).toLocaleString();
+  const embedVideoUrl = post.media_type === 'video' ? getEmbedVideoUrl(post.media_url) : null;
 
   return (
     <div className="post-detail-container">
       <div className="detail-actions">
-        <Link to="/" className="btn-secondary">← Back to Feed</Link>
+        <Link to="/" className="btn-secondary">
+          <FaArrowLeft /> Back to Feed
+        </Link>
         <div className="post-admin-actions">
           <Link to={`/edit/${post.id}`} className="btn-secondary">
             <FaEdit /> Edit / Delete
@@ -110,7 +113,12 @@ const PostDetail = () => {
       </div>
 
       <article className="post-detail-content">
+        <div className="detail-header-tags">
+          <span className="category-tag">{post.category || 'Discussion'}</span>
+        </div>
+        
         <h1>{post.title}</h1>
+        
         <div className="post-meta">
           <span><FaUser /> {post.author || 'Anonymous'}</span>
           <span><FaClock /> {formattedDate}</span>
@@ -118,16 +126,18 @@ const PostDetail = () => {
 
         {post.media_url && (
           <div className="post-media-container">
-            {post.media_type === 'video' ? (
-              <iframe
-                src={post.media_url}
-                title={post.title}
-                allowFullScreen
-                className="post-video"
-              ></iframe>
-            ) : (
+            {post.media_type === 'video' && embedVideoUrl ? (
+              <div className="video-responsive">
+                <iframe
+                  src={embedVideoUrl}
+                  title={post.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            ) : post.media_type === 'image' ? (
               <img src={post.media_url} alt={post.title} className="post-detail-image" />
-            )}
+            ) : null}
           </div>
         )}
 
@@ -135,16 +145,15 @@ const PostDetail = () => {
           <p>{post.content}</p>
         </div>
 
-        <div className="upvote-bar">
+        <div className="post-interaction-bar">
           <button onClick={handleUpvote} className="upvote-btn-large">
             <FaRocket /> {post.upvotes} Upvotes
           </button>
-        </div>
-
-        <div className="post-interaction-bar">
+          
           <button onClick={handleRepost} className="btn-secondary">
-            <FaRetweet /> Repost Transmission
+            <FaRetweet /> Repost
           </button>
+
           <button 
             onClick={handleFlag} 
             className={`btn-secondary ${flagged ? 'flagged' : ''}`}
