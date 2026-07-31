@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPost } from '../services/postsService';
 import { fetchAstronomyPictureOfDay, searchNasaLibrary } from '../services/nasaService';
 import { FaRocket, FaSearch, FaImage } from 'react-icons/fa';
+import { uploadMediaFile } from '../services/storageService'; 
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -21,6 +22,26 @@ const CreatePost = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [uploadingFile, setUploadingFile] = useState(false); 
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setUploadingFile(true);
+      const publicUrl = await uploadMediaFile(file);
+      setFormData((prev) => ({
+        ...prev,
+        media_url: publicUrl,
+        media_type: 'image',
+      }));
+    } catch (err) {
+      setError('Failed to upload file to storage.');
+    } finally {
+      setUploadingFile(false);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -182,6 +203,17 @@ const CreatePost = () => {
             onChange={handleChange}
             placeholder="https://..."
           />
+        </div>
+
+        <div className="form-group">
+          <label>Or Upload Attachment File</label>
+          <input 
+            type="file" 
+            accept="image/*" 
+            onChange={handleFileUpload} 
+            disabled={uploadingFile} 
+          />
+          {uploadingFile && <small>Uploading file to deep space storage...</small>}
         </div>
 
         <div className="form-group">
