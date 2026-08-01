@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { fetchPostById, upvotePost, flagPost, createRepost } from '../services/postsService';
+import { fetchPostWithParent, upvotePost, flagPost, createRepost } from '../services/postsService';
 import { fetchCommentsByPostId, createComment } from '../services/commentsService';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { getEmbedVideoUrl } from '../utils/videoHelper';
-import { FaRocket, FaEdit, FaClock, FaUser, FaComment, FaFlag, FaRetweet, FaArrowLeft } from 'react-icons/fa';
+import { FaRocket, FaEdit, FaClock, FaUser, FaComment, FaFlag, FaRetweet, FaArrowLeft, FaLink, FaHashtag } from 'react-icons/fa';
+import './PostDetail.css';
 
 const PostDetail = () => {
   const { id } = useParams();
@@ -23,7 +24,7 @@ const PostDetail = () => {
     try {
       setLoading(true);
       const [postData, commentsData] = await Promise.all([
-        fetchPostById(id),
+        fetchPostWithParent(id),
         fetchCommentsByPostId(id),
       ]);
       setPost(postData);
@@ -64,8 +65,10 @@ const PostDetail = () => {
   const handleRepost = async () => {
     if (!post) return;
     const author = prompt('Enter your alias for this repost:');
+    if (author === null) return; 
+    
     try {
-      const repost = await createRepost(post, author);
+      const repost = await createRepost(post, author || 'Anonymous Stargazer');
       navigate(`/post/${repost.id}`);
     } catch (err) {
       setError('Failed to mirror transmission.');
@@ -99,6 +102,10 @@ const PostDetail = () => {
   const formattedDate = new Date(post.created_at).toLocaleString();
   const embedVideoUrl = post.media_type === 'video' ? getEmbedVideoUrl(post.media_url) : null;
 
+  const parentFormattedDate = post.parent_post 
+    ? new Date(post.parent_post.created_at).toLocaleString()
+    : null;
+
   return (
     <div className="post-detail-container">
       <div className="detail-actions">
@@ -122,7 +129,41 @@ const PostDetail = () => {
         <div className="post-meta">
           <span><FaUser /> {post.author || 'Anonymous'}</span>
           <span><FaClock /> {formattedDate}</span>
+          <span className="post-id-display">
+            <FaHashtag /> ID: <span className="post-id-text">{post.id}</span>
+          </span>
         </div>
+
+        {post.parent_post && (
+          <div className="parent-post-container">
+            <div className="parent-post-header">
+              <FaLink className="parent-link-icon" />
+              <span>Reposted From:</span>
+            </div>
+            <div className="parent-post-card">
+              <Link to={`/post/${post.parent_post.id}`} className="parent-post-link">
+                <div className="parent-post-content">
+                  <div className="parent-post-badge">
+                    <span className="parent-category-tag">{post.parent_post.category || 'Discussion'}</span>
+                  </div>
+                  <h3 className="parent-post-title">{post.parent_post.title}</h3>
+                  <div className="parent-post-meta">
+                    <span><FaUser /> {post.parent_post.author || 'Anonymous'}</span>
+                    <span><FaClock /> {parentFormattedDate}</span>
+                  </div>
+                  {post.parent_post.content && (
+                    <p className="parent-post-excerpt">
+                      {post.parent_post.content.length > 200
+                        ? `${post.parent_post.content.substring(0, 200)}...`
+                        : post.parent_post.content}
+                    </p>
+                  )}
+                  <span className="parent-post-view-link">Click to view original →</span>
+                </div>
+              </Link>
+            </div>
+          </div>
+        )}
 
         {post.media_url && (
           <div className="post-media-container">
@@ -141,9 +182,11 @@ const PostDetail = () => {
           </div>
         )}
 
-        <div className="post-body-text">
-          <p>{post.content}</p>
-        </div>
+        {post.content && (
+          <div className="post-body-text">
+            <p>{post.content}</p>
+          </div>
+        )}
 
         <div className="post-interaction-bar">
           <button onClick={handleUpvote} className="upvote-btn-large">

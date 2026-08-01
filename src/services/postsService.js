@@ -33,10 +33,54 @@ export const fetchPostById = async (id) => {
   return data;
 };
 
-export const createPost = async (postData) => {
+export const fetchPostWithParent = async (id) => {
   const { data, error } = await supabase
     .from('posts')
-    .insert([postData])
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) throw error;
+
+  if (data.parent_id) {
+    const { data: parentData, error: parentError } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('id', data.parent_id)
+      .single();
+
+    if (!parentError) {
+      data.parent_post = parentData;
+    }
+  }
+
+  return data;
+};
+
+export const validatePostId = async (id) => {
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('id, title, author, created_at, content, media_url, media_type, category')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const createPost = async (postData) => {
+  const dataToInsert = {
+    ...postData,
+    content: postData.content || '',
+  };
+
+  const { data, error } = await supabase
+    .from('posts')
+    .insert([dataToInsert])
     .select();
 
   if (error) throw error;
@@ -91,13 +135,14 @@ export const createRepost = async (parentPost, newAuthor) => {
     .from('posts')
     .insert([
       {
-        title: `Repost: ${parentPost.title}`,
-        content: parentPost.content,
+        title: parentPost.title,
+        content: newAuthor ? `Reposted from ${parentPost.author || 'Anonymous'}: ${parentPost.content || ''}` : parentPost.content || '',
         author: newAuthor || 'Anonymous Stargazer',
         secret_key: `repost_${Date.now()}`,
-        media_url: parentPost.media_url,
-        media_type: parentPost.media_type,
-        parent_id: parentPost.id,
+        media_url: parentPost.media_url || '',
+        media_type: parentPost.media_type || 'image',
+        category: parentPost.category || 'Discussion',
+        parent_id: parentPost.id, 
       },
     ])
     .select();

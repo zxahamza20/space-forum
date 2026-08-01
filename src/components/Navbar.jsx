@@ -21,7 +21,7 @@ const Navbar = () => {
         </NavLink>
         <div className="user-badge">
           <FaRocket />
-          <span className="user-id">User-7X3K9Q</span>
+          <span className="user-id">User ID: 7X3K9Q</span>
         </div>
       </nav>
     </header>

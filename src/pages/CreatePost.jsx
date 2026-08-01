@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createPost } from '../services/postsService';
+import { createPost, validatePostId } from '../services/postsService';
 import { fetchAstronomyPictureOfDay, searchNasaLibrary } from '../services/nasaService';
 import { uploadMediaFile } from '../services/storageService';
-import { FaRocket, FaSearch, FaFileUpload } from 'react-icons/fa';
+import { FaRocket, FaSearch, FaFileUpload, FaLink } from 'react-icons/fa';
 import './CreatePost.css';
 
 const CreatePost = () => {
@@ -17,6 +17,7 @@ const CreatePost = () => {
     media_url: '',
     media_type: 'image',
     category: 'Question',
+    parent_id: '', 
   });
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,12 +26,43 @@ const CreatePost = () => {
   const [uploadingFile, setUploadingFile] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [parentPostPreview, setParentPostPreview] = useState(null);
+  const [validatingParent, setValidatingParent] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
+
+    if (e.target.name === 'parent_id') {
+      setParentPostPreview(null);
+    }
+  };
+
+  const handleParentIdBlur = async () => {
+    const parentId = formData.parent_id.trim();
+    if (!parentId) {
+      setParentPostPreview(null);
+      return;
+    }
+
+    try {
+      setValidatingParent(true);
+      const post = await validatePostId(parentId);
+      if (post) {
+        setParentPostPreview(post);
+        setError(null);
+      } else {
+        setParentPostPreview(null);
+        setError('No post found with this ID. Please check and try again.');
+      }
+    } catch (err) {
+      setParentPostPreview(null);
+      setError('Error validating post ID.');
+    } finally {
+      setValidatingParent(false);
+    }
   };
 
   const handleFetchAPOD = async () => {
@@ -106,16 +138,25 @@ const CreatePost = () => {
       return;
     }
 
+    if (formData.parent_id.trim()) {
+      const parentExists = await validatePostId(formData.parent_id.trim());
+      if (!parentExists) {
+        setError('The referenced post ID does not exist. Please check and try again.');
+        return;
+      }
+    }
+
     try {
       setLoading(true);
       const newPost = await createPost({
         title: formData.title,
-        content: formData.content || '', 
+        content: formData.content || '',
         author: formData.author.trim() || 'Anonymous',
         secret_key: formData.secret_key,
         media_url: formData.media_url || '',
         media_type: formData.media_type,
         category: formData.category,
+        parent_id: formData.parent_id.trim() || null, 
       });
       navigate(`/post/${newPost.id}`);
     } catch (err) {
@@ -203,6 +244,44 @@ const CreatePost = () => {
           />
         </div>
 
+        <div className="form-group repost-group">
+          <label>
+            <FaLink /> Repost a Previous Post <span className="text-muted">(Optional)</span>
+          </label>
+          <div className="repost-input-group">
+            <input
+              type="text"
+              name="parent_id"
+              value={formData.parent_id}
+              onChange={handleChange}
+              onBlur={handleParentIdBlur}
+              placeholder="Enter the ID of the post you want to repost (e.g., abc-123-def)"
+            />
+            {validatingParent && <span className="validating-spinner">⏳ Validating...</span>}
+          </div>
+          
+          {parentPostPreview && (
+            <div className="parent-preview-card">
+              <div className="parent-preview-header">
+                <span className="parent-preview-badge">{parentPostPreview.category || 'Discussion'}</span>
+                <span className="parent-preview-author">By {parentPostPreview.author || 'Anonymous'}</span>
+              </div>
+              <h4 className="parent-preview-title">{parentPostPreview.title}</h4>
+              <p className="parent-preview-date">
+                {new Date(parentPostPreview.created_at).toLocaleDateString()}
+              </p>
+              {parentPostPreview.content && (
+                <p className="parent-preview-excerpt">
+                  {parentPostPreview.content.length > 100
+                    ? `${parentPostPreview.content.substring(0, 100)}...`
+                    : parentPostPreview.content}
+                </p>
+              )}
+              <span className="parent-preview-valid">✅ Valid post - will be linked</span>
+            </div>
+          )}
+        </div>
+
         <div className="form-group">
           <label>Secret Key <span className="required">*</span> (Required to Edit/Delete)</label>
           <input
@@ -216,7 +295,7 @@ const CreatePost = () => {
         </div>
 
         <div className="form-group">
-          <label>Media Attachment Type </label>
+          <label>Media Attachment Type <span className="text-muted">(Optional)</span></label>
           <div className="radio-group">
             <label>
               <input
@@ -245,14 +324,14 @@ const CreatePost = () => {
             onChange={handleChange}
             placeholder={
               formData.media_type === 'video'
-                ? 'https://www.youtube.com/watch?v=... '
-                : 'https://... '
+                ? 'https://www.youtube.com/watch?v=... (Optional)'
+                : 'https://... (Optional)'
             }
           />
         </div>
 
         <div className="form-group">
-          <label><FaFileUpload /> Or Upload Image File </label>
+          <label><FaFileUpload /> Or Upload Image File <span className="text-muted">(Optional)</span></label>
           <input
             type="file"
             accept="image/*"
@@ -263,13 +342,13 @@ const CreatePost = () => {
         </div>
 
         <div className="form-group">
-          <label>Transmission Content </label>
+          <label>Transmission Content <span className="text-muted">(Optional)</span></label>
           <textarea
             name="content"
             value={formData.content}
             onChange={handleChange}
             rows="6"
-            placeholder="Share your thoughts on cosmic phenomena... "
+            placeholder="Share your thoughts on cosmic phenomena... (Optional)"
           ></textarea>
         </div>
 

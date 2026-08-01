@@ -104,6 +104,100 @@
   font-size: var(--text-sm);
 }
 
+.repost-group {
+  background: var(--bg-body);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.repost-group label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.repost-group label svg {
+  color: var(--color-complementary);
+}
+
+.repost-input-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  position: relative;
+}
+
+.repost-input-group input {
+  flex: 1;
+}
+
+.validating-spinner {
+  position: absolute;
+  right: 12px;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.parent-preview-card {
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border: 1px solid var(--color-accent-blue);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-accent-blue);
+}
+
+.parent-preview-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.parent-preview-badge {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  background: var(--gradient-primary);
+  color: #fff;
+}
+
+.parent-preview-author {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.parent-preview-title {
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  margin: var(--space-xs) 0;
+}
+
+.parent-preview-date {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+
+.parent-preview-excerpt {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  margin: var(--space-xs) 0;
+  line-height: 1.5;
+}
+
+.parent-preview-valid {
+  display: inline-block;
+  margin-top: var(--space-xs);
+  color: #00B894;
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
 @media (max-width: 768px) {
   .nasa-results-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -114,6 +208,10 @@
   }
   
   .nasa-buttons {
+    flex-direction: column;
+  }
+  
+  .repost-input-group {
     flex-direction: column;
   }
 }
