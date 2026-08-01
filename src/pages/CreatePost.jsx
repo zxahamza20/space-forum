@@ -4,6 +4,7 @@ import { createPost } from '../services/postsService';
 import { fetchAstronomyPictureOfDay, searchNasaLibrary } from '../services/nasaService';
 import { uploadMediaFile } from '../services/storageService';
 import { FaRocket, FaSearch, FaFileUpload } from 'react-icons/fa';
+import './CreatePost.css';
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -99,8 +100,9 @@ const CreatePost = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.content || !formData.secret_key) {
-      setError('Please fill out all required fields (Title, Content, Secret Key).');
+    
+    if (!formData.title || !formData.secret_key) {
+      setError('Please fill out all required fields (Title and Secret Key).');
       return;
     }
 
@@ -108,10 +110,10 @@ const CreatePost = () => {
       setLoading(true);
       const newPost = await createPost({
         title: formData.title,
-        content: formData.content,
+        content: formData.content || '', 
         author: formData.author.trim() || 'Anonymous',
         secret_key: formData.secret_key,
-        media_url: formData.media_url,
+        media_url: formData.media_url || '',
         media_type: formData.media_type,
         category: formData.category,
       });
@@ -128,7 +130,6 @@ const CreatePost = () => {
       <h1>Transmit New Space Discussion</h1>
       {error && <p className="error-message">{error}</p>}
 
-      {/* NASA Media Integration Helper */}
       <div className="nasa-helper-section">
         <h3>Import NASA Media</h3>
         <div className="nasa-buttons">
@@ -163,7 +164,6 @@ const CreatePost = () => {
 
       <hr className="divider" />
 
-      {/* Main Post Form */}
       <form onSubmit={handleSubmit} className="post-form">
         <div className="form-group">
           <label>Post Flag / Characteristic *</label>
@@ -181,7 +181,7 @@ const CreatePost = () => {
         </div>
 
         <div className="form-group">
-          <label>Title *</label>
+          <label>Title <span className="required">*</span></label>
           <input
             type="text"
             name="title"
@@ -204,7 +204,7 @@ const CreatePost = () => {
         </div>
 
         <div className="form-group">
-          <label>Secret Key * (Required to Edit/Delete)</label>
+          <label>Secret Key <span className="required">*</span> (Required to Edit/Delete)</label>
           <input
             type="password"
             name="secret_key"
@@ -216,7 +216,7 @@ const CreatePost = () => {
         </div>
 
         <div className="form-group">
-          <label>Media Attachment Type</label>
+          <label>Media Attachment Type </label>
           <div className="radio-group">
             <label>
               <input
@@ -245,14 +245,14 @@ const CreatePost = () => {
             onChange={handleChange}
             placeholder={
               formData.media_type === 'video'
-                ? 'https://www.youtube.com/watch?v=...'
-                : 'https://...'
+                ? 'https://www.youtube.com/watch?v=... '
+                : 'https://... '
             }
           />
         </div>
 
         <div className="form-group">
-          <label><FaFileUpload /> Or Upload Image File</label>
+          <label><FaFileUpload /> Or Upload Image File </label>
           <input
             type="file"
             accept="image/*"
@@ -263,14 +263,13 @@ const CreatePost = () => {
         </div>
 
         <div className="form-group">
-          <label>Transmission Content *</label>
+          <label>Transmission Content </label>
           <textarea
             name="content"
             value={formData.content}
             onChange={handleChange}
             rows="6"
-            placeholder="Share your thoughts on cosmic phenomena..."
-            required
+            placeholder="Share your thoughts on cosmic phenomena... "
           ></textarea>
         </div>
 

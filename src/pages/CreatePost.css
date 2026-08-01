@@ -93,6 +93,17 @@
   text-overflow: ellipsis;
 }
 
+.required {
+  color: var(--color-complementary);
+  font-weight: 700;
+}
+
+.text-muted {
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: var(--text-sm);
+}
+
 @media (max-width: 768px) {
   .nasa-results-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));

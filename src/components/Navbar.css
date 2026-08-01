@@ -1,10 +1,5 @@
-/* ============================================
-   NAVBAR - SpaceForum
-   Full Solid Color: Cosmic Orange (#FF6B35)
-   ============================================ */
-
 .navbar {
-  background: #FF6B35;  /* Full solid complementary color */
+  background: #FF6B35; 
   padding: var(--space-md) var(--space-xl);
   display: flex;
   justify-content: space-between;
@@ -107,7 +102,6 @@
   color: #FFFFFF;
 }
 
-/* User Badge - Light version for dark navbar */
 .user-badge {
   display: flex;
   align-items: center;
@@ -133,10 +127,6 @@
   color: #FFFFFF;
   font-size: var(--text-xs);
 }
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
 
 @media (max-width: 768px) {
   .navbar {
