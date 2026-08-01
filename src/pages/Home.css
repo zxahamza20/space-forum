@@ -1,0 +1,208 @@
+.home-container {
+  padding: var(--space-md) 0;
+}
+
+.feed-header {
+  margin-bottom: var(--space-2xl);
+  text-align: center;
+  position: relative;
+}
+
+.feed-header h1 {
+  font-size: var(--text-4xl);
+  margin-bottom: var(--space-sm);
+  animation: fadeInDown 0.6s ease;
+}
+
+.feed-header p {
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.category-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  margin-bottom: var(--space-lg);
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
+.category-pills {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.pill-btn {
+  padding: 0.35rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  background: var(--bg-body);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  transition: all var(--transition-normal);
+  cursor: pointer;
+}
+
+.pill-btn:hover {
+  border-color: var(--color-accent-blue);
+  color: var(--text-primary);
+}
+
+.pill-btn.active {
+  background: var(--gradient-primary);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 0 20px var(--color-accent-blue-glow);
+}
+
+.pill-btn.active:hover {
+  box-shadow: 0 0 40px var(--color-accent-blue-glow);
+  transform: translateY(-1px);
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 0.5rem 1rem;
+  flex: 1;
+  min-width: 200px;
+  transition: all var(--transition-normal);
+}
+
+.search-box:focus-within {
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 0 20px var(--color-accent-blue-glow);
+}
+
+.search-icon {
+  color: var(--text-muted);
+  margin-right: var(--space-sm);
+  font-size: var(--text-base);
+}
+
+.search-box input {
+  background: transparent;
+  border: none;
+  padding: 0.25rem 0;
+  color: var(--text-primary);
+  width: 100%;
+}
+
+.search-box input:focus {
+  box-shadow: none;
+}
+
+.sort-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.sort-box select {
+  width: auto;
+  padding: 0.4rem 2rem 0.4rem 1rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.sort-box select:focus {
+  border-color: var(--color-accent-blue);
+}
+
+.posts-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.empty-feed {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-xl);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.empty-feed p {
+  color: var(--text-muted);
+  font-size: var(--text-lg);
+}
+
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-box {
+    min-width: auto;
+  }
+  
+  .category-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .feed-header h1 {
+    font-size: var(--text-2xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .pill-btn {
+    font-size: var(--text-xs);
+    padding: 0.25rem 0.75rem;
+  }
+  
+  .sort-box select {
+    padding: 0.3rem 1.5rem 0.3rem 0.75rem;
+    font-size: var(--text-xs);
+  }
+}

@@ -1,0 +1,114 @@
+.create-post-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.create-post-container h1 {
+  margin-bottom: var(--space-sm);
+  text-align: center;
+}
+
+.create-post-container > p {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-xl);
+}
+
+.nasa-helper-section {
+  background: var(--bg-card);
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  margin-bottom: var(--space-xl);
+}
+
+.nasa-helper-section h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  font-size: var(--text-lg);
+}
+
+.nasa-helper-section h3::before {
+  content: '🛰️';
+  font-size: var(--text-xl);
+}
+
+.nasa-buttons {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.nasa-search-form {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.nasa-search-form input {
+  flex: 1;
+  min-width: 150px;
+}
+
+.nasa-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.nasa-result-card {
+  background: var(--bg-body);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.nasa-result-card:hover {
+  border-color: var(--color-accent-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px var(--color-accent-blue-glow);
+}
+
+.nasa-result-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  display: block;
+}
+
+.nasa-result-card p {
+  padding: var(--space-sm);
+  font-size: var(--text-xs);
+  text-align: center;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+  .nasa-results-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+  
+  .nasa-search-form {
+    flex-direction: column;
+  }
+  
+  .nasa-buttons {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .nasa-results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
