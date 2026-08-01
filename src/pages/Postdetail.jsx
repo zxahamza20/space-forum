@@ -215,7 +215,7 @@ const PostDetail = () => {
         <form onSubmit={handleCommentSubmit} className="comment-form">
           <input
             type="text"
-            placeholder="Your Alias (Optional)"
+            placeholder="Your Alias"
             value={authorAlias}
             onChange={(e) => setAuthorAlias(e.target.value)}
           />
