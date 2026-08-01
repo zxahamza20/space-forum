@@ -135,7 +135,7 @@ export const createRepost = async (parentPost, newAuthor) => {
     .from('posts')
     .insert([
       {
-        title: parentPost.title,
+        title: `Reposted: ${parentPost.title}`,
         content: newAuthor ? `Reposted from ${parentPost.author || 'Anonymous'}: ${parentPost.content || ''}` : parentPost.content || '',
         author: newAuthor || 'Anonymous Stargazer',
         secret_key: `repost_${Date.now()}`,

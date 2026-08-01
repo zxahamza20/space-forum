@@ -153,8 +153,8 @@ const PostDetail = () => {
                   </div>
                   {post.parent_post.content && (
                     <p className="parent-post-excerpt">
-                      {post.parent_post.content.length > 200
-                        ? `${post.parent_post.content.substring(0, 200)}...`
+                      {post.parent_post.content.length > 50
+                        ? `${post.parent_post.content.substring(0, 50)}...`
                         : post.parent_post.content}
                     </p>
                   )}
