@@ -58,7 +58,6 @@ const Home = () => {
         <p>Explore recent interstellar discussions and media.</p>
       </header>
 
-      {/* Category Flag Pills */}
       <div className="category-filter-bar">
         <span className="filter-label"><FaFilter /> Filter Flag:</span>
         <div className="category-pills">
@@ -74,7 +73,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Search & Sort Controls */}
       <div className="filter-bar">
         <div className="search-box">
           <FaSearch className="search-icon" />
@@ -101,7 +99,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Main Content Render */}
       {loading ? (
         <LoadingSpinner />
       ) : error ? (
