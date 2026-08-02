@@ -136,6 +136,9 @@ GIF created with Kap [MacOS]
 **NASA API integration (Random Topics)**
 <img src='https://i.imgur.com/P6PoztF.png' title='NASA API integration (Random Topics)' width='' alt='NASA API integration (Random Topics)' />
 
+**Upload from System**
+<img src='https://i.imgur.com/VBDOEmY.png' title='Upload from System' width='' alt='Upload from System' />
+
 ## Notes
 
 1. The biggest challenge was Implementing the "Users can customize the interface" feature. despite AI's help, I was having a hard time implementing the feature. My goal was to add 3 things: 
