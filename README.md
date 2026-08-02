@@ -73,6 +73,60 @@ GIF created with Kap [MacOS]
 
 ### Production Images
 
+**Home Page (p1)**
+<img src='https://i.imgur.com/RZcjoNx.png' title='Home Page (p1)' width='' alt='Home Page (p1)' />
+
+**Home Page (p2)**
+<img src='https://i.imgur.com/9knLxbQ.png' title='Home Page (p2)' width='' alt='Home Page (p2)' />
+
+**View Post (p1)**
+<img src='https://i.imgur.com/RPGYUWl.png' title='View Post (p1)' width='' alt='View Post (p1)' />
+
+**View Post (p2)**
+<img src='https://i.imgur.com/S7YymLD.png' title='View Post (p2)' width='' alt='View Post (p2)' />
+
+**Create Post (p1)**
+<img src='https://i.imgur.com/KW0r3lv.png' title='Create Post (p1)' width='' alt='Create Post (p1)' />
+
+**Create Post (p2)**
+<img src='https://i.imgur.com/1jgX3Z9.png' title='Create Post (p2)' width='' alt='Create Post (p2)' />
+
+**Edit Post (p1)**
+<img src='https://i.imgur.com/m9W6Eon.png' title='Edit Post (p1)' width='' alt='Edit Post (p1)' />
+
+**Edit Post (p2)**
+<img src='https://i.imgur.com/SnZBNG5.png' title='Edit Post (p2)' width='' alt='Edit Post (p2)' />
+
+**Delete Post (p1)**
+<img src='https://i.imgur.com/A4SN4Eq.png' title='Delete Post (p1)' width='' alt='Delete Post (p1)' />
+
+**Delete Post (p2)**
+<img src='https://i.imgur.com/CX6JNPl.png' title='Delete Post (p2)' width='' alt='Delete Post (p2)' />
+
+**Filter By Flag (Question)**
+<img src='https://i.imgur.com/kPs8UcF.png' title='Filter By Flag (Question)' width='' alt='Filter By Flag (Question)' />
+
+**Filter By Flag (opinion)**
+<img src='https://i.imgur.com/UWBykfX.png' title='Filter By Flag (Opinion)' width='' alt='Filter By Flag (Opinion)' />
+
+**Filter By Flag (Discussion)**
+<img src='https://i.imgur.com/NUZ3xKX.png' title='Filter By Flag (Discussion)' width='' alt='Filter By Flag (Discussion)' />
+
+**Filter By Flag (Media/Discovery)**
+<img src='https://i.imgur.com/6m6yMii.png' title='Filter By Flag (Media/Discovery)' width='' alt='Filter By Flag (Media/Discovery)' />
+
+**Sort by Newest (Default) (Date of creation)**
+<img src='https://i.imgur.com/RZcjoNx.png' title='Sort by Newest (Default) (Date of creation)' width='' alt='Sort by Newest (Default) (Date of creation)' />
+
+**Sort by Most popular (Most Upvotes)**
+<img src='https://i.imgur.com/0e7X5Td.png' title='Sort by Most popular (Most Upvotes)' width='' alt='Sort by Most popular (Most Upvotes)' />
+
+**Repost (p1)**
+<img src='https://i.imgur.com/q5gSj4h.png' title='Repost (p1)' width='' alt='Repost (p1)' />
+
+**Repost (p2)**
+<img src='https://i.imgur.com/q1sTdc5.png' title='Repost (p2)' width='' alt='Repost (p2)' />
+
 ## Notes
 
 1. The biggest challenge was Implementing the "Users can customize the interface" feature. despite AI's help, I was having a hard time implementing the feature. My goal was to add 3 things: 
