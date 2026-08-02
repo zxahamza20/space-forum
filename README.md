@@ -127,6 +127,15 @@ GIF created with Kap [MacOS]
 **Repost (p2)**
 <img src='https://i.imgur.com/q1sTdc5.png' title='Repost (p2)' width='' alt='Repost (p2)' />
 
+**Search for a post to view**
+<img src='https://i.imgur.com/U4bK9PJ.png' title='Search for a post to view' width='' alt='Search for a post to view' />
+
+**NASA API integration (Picture of the Day)**
+<img src='https://i.imgur.com/16EO9AO.png' title='NASA API integration (Picture of the Day)' width='' alt='NASA API integration (Picture of the Day)' />
+
+**NASA API integration (Random Topics)**
+<img src='https://i.imgur.com/P6PoztF.png' title='NASA API integration (Random Topics)' width='' alt='NASA API integration (Random Topics)' />
+
 ## Notes
 
 1. The biggest challenge was Implementing the "Users can customize the interface" feature. despite AI's help, I was having a hard time implementing the feature. My goal was to add 3 things: 
