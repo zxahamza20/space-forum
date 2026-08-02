@@ -28,6 +28,170 @@
   color: var(--color-complementary);
 }
 
+.media-edit-section {
+  background: var(--bg-body);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.media-edit-section label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.media-type-selector {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.media-type-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.5rem 1.25rem;
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.media-type-btn:hover {
+  border-color: var(--color-accent-blue);
+  color: var(--text-primary);
+}
+
+.media-type-btn.active {
+  border-color: var(--color-accent-blue);
+  background: var(--color-accent-blue-glow);
+  color: var(--text-primary);
+}
+
+.current-media-preview {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.preview-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+}
+
+.remove-media-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0.25rem 0.75rem;
+  background: rgba(229, 62, 62, 0.15);
+  color: #E53E3E;
+  border: 1px solid rgba(229, 62, 62, 0.3);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.remove-media-btn:hover {
+  background: rgba(229, 62, 62, 0.25);
+}
+
+.preview-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.preview-video {
+  padding: var(--space-md);
+  background: var(--bg-body);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.preview-video a {
+  color: var(--color-accent-blue);
+  text-decoration: underline;
+}
+
+.media-input-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.media-option {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.5rem 1rem;
+  background: var(--bg-card);
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.upload-label:hover {
+  border-color: var(--color-accent-blue);
+  color: var(--text-primary);
+}
+
+.upload-label input[type="file"] {
+  display: none;
+}
+
+.upload-status {
+  color: var(--color-accent-blue);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.upload-hint {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-style: italic;
+}
+
+.url-option input {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 1rem;
+  color: var(--text-primary);
+}
+
+.url-option input:focus {
+  border-color: var(--color-accent-blue);
+}
+
 .action-buttons {
   display: flex;
   justify-content: space-between;
@@ -47,6 +211,7 @@
   justify-content: center;
 }
 
+
 @media (max-width: 768px) {
   .action-buttons {
     flex-direction: column;
@@ -55,5 +220,29 @@
   .action-buttons .btn-primary,
   .action-buttons .btn-danger {
     width: 100%;
+  }
+
+  .media-type-selector {
+    flex-direction: column;
+  }
+
+  .media-type-btn {
+    justify-content: center;
+  }
+
+  .preview-header {
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .media-edit-section {
+    padding: var(--space-sm);
+  }
+  
+  .upload-label {
+    justify-content: center;
   }
 }

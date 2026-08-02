@@ -99,6 +99,10 @@ export const upvotePost = async (id, currentUpvotes) => {
 };
 
 export const updatePost = async (id, updatedFields) => {
+  if (updatedFields.media_url === '') {
+    updatedFields.media_url = null;
+  }
+  
   const { data, error } = await supabase
     .from('posts')
     .update(updatedFields)
