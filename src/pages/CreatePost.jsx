@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPost, validatePostId } from '../services/postsService';
 import { fetchAstronomyPictureOfDay, searchNasaLibrary } from '../services/nasaService';
 import { uploadMediaFile } from '../services/storageService';
-import { FaRocket, FaSearch, FaFileUpload, FaLink } from 'react-icons/fa';
+import { FaRocket, FaSearch, FaFileUpload, FaLink, FaArrowLeft } from 'react-icons/fa';
 import './CreatePost.css';
 
 const CreatePost = () => {
@@ -17,7 +17,7 @@ const CreatePost = () => {
     media_url: '',
     media_type: 'image',
     category: 'Question',
-    parent_id: '', 
+    parent_id: '',
   });
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -156,7 +156,7 @@ const CreatePost = () => {
         media_url: formData.media_url || '',
         media_type: formData.media_type,
         category: formData.category,
-        parent_id: formData.parent_id.trim() || null, 
+        parent_id: formData.parent_id.trim() || null,
       });
       navigate(`/post/${newPost.id}`);
     } catch (err) {
@@ -166,8 +166,18 @@ const CreatePost = () => {
     }
   };
 
+  const handleCancel = () => {
+      navigate('/');
+  };
+
   return (
     <div className="create-post-container">
+      <div className="create-post-actions">
+        <button onClick={handleCancel} className="btn-secondary cancel-btn">
+          <FaArrowLeft /> Cancel
+        </button>
+      </div>
+
       <h1>Transmit New Space Discussion</h1>
       {error && <p className="error-message">{error}</p>}
 
@@ -349,12 +359,22 @@ const CreatePost = () => {
             onChange={handleChange}
             rows="6"
             placeholder="Share your thoughts on cosmic phenomena... (Optional)"
-          ></textarea>
+          />
         </div>
 
-        <button type="submit" className="btn-primary" disabled={loading || uploadingFile}>
-          {loading ? 'Transmitting...' : 'Send Transmission'}
-        </button>
+        <div className="form-actions">
+          <button type="submit" className="btn-primary" disabled={loading || uploadingFile}>
+            {loading ? 'Transmitting...' : 'Send Transmission'}
+          </button>
+          <button 
+            type="button" 
+            onClick={handleCancel} 
+            className="btn-secondary cancel-submit-btn"
+            disabled={loading || uploadingFile}
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

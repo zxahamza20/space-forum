@@ -3,6 +3,20 @@
   margin: 0 auto;
 }
 
+.create-post-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: var(--space-md);
+}
+
+.cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.5rem 1.25rem;
+  font-size: var(--text-sm);
+}
+
 .create-post-container h1 {
   margin-bottom: var(--space-sm);
   text-align: center;
@@ -198,6 +212,23 @@
   font-size: var(--text-sm);
 }
 
+.form-actions {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.form-actions .btn-primary {
+  flex: 2;
+  justify-content: center;
+}
+
+.form-actions .cancel-submit-btn {
+  flex: 1;
+  justify-content: center;
+}
+
+
 @media (max-width: 768px) {
   .nasa-results-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -213,6 +244,24 @@
   
   .repost-input-group {
     flex-direction: column;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn-primary,
+  .form-actions .cancel-submit-btn {
+    width: 100%;
+  }
+
+  .create-post-actions {
+    justify-content: stretch;
+  }
+
+  .cancel-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 
